@@ -1,0 +1,54 @@
+version: '2.0'
+services:
+  ############################################################################
+  #  Functional services
+  ############################################################################
+  #
+  # Entry point - API gateway
+  #
+  apigateway:
+    build: ./apigateway
+    ports:
+      - "80:80"
+    links:
+     - users
+     - accounts
+     - transactions
+     - image_classifier  # Replacing 'payment' with 'image_classifier'
+     - ca
+     - reversests
+    depends_on:
+     - image_classifier  # Replacing 'payment' with 'image_classifier'
+     - ca
+     - reversests
+    environment:
+      - MTLS=True
+      - TOKEN=True
+      - SERVICE_DEBUG=True
+      - FLASK_DEBUG=True
+  # ... [Other services like users, accounts, transactions remain unchanged]
+
+  #
+  # Image Classifier service
+  #
+  image_classifier:  # This is the new service replacing 'payment'
+    image: image_classifier  # Using the Docker image you built
+    ports:
+     - "5000:5000"  # Exposing port 5000 for the classifier API
+    environment:
+      - SERVICE_DEBUG=True
+      - FLASK_DEBUG=True
+
+  ############################################################################
+  #  Security infrastructure services
+  ############################################################################
+  # ... [CA and reversests services remain unchanged]
+
+##############################################################################
+#  Data volumes
+##############################################################################
+volumes:
+  usersvol: {}
+  accountsvol: {}
+  transactionsvol: {}
+  # Removed 'paymentsvol' as it's no longer needed
