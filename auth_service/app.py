@@ -16,6 +16,7 @@ app.register_blueprint(user_bp, url_prefix='/user')
 
 app = Flask(__name__)
 SECRET_KEY = "9414686936@Papa"
+CERTIFICATE_DIR = 'certs'
 
 @app.route('/')
 def index():
