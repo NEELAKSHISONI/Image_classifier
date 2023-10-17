@@ -7,11 +7,15 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org flask
+# Set up a virtual environment and install packages
+RUN python -m venv venv && \
+    . venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-# Run classifier.py when the container launches
-CMD ["python", "classifier.py"]
+# Activate the virtual environment and run classifier.py when the container launches
+CMD . venv/bin/activate && python classifier.py
+

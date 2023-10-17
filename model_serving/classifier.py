@@ -3,6 +3,9 @@ from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, decode_predictions
 from flask import Flask, request, jsonify
 import numpy as np
+MODEL_SERVING_HOST = '0.0.0.0'
+MODEL_SERVING_PORT = 5003
+
 
 # Load pre-trained ResNet50 model + higher level layers
 base_model = ResNet50(weights='imagenet')
@@ -48,4 +51,5 @@ def favicon():
     return app.send_static_file('favicon.ico')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host=MODEL_SERVING_HOST, port=MODEL_SERVING_PORT, debug=True)
+
